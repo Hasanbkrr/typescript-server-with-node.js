@@ -14,7 +14,7 @@ You need to have Node.js and npm installed on your machine. You can download the
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/your-username/typescript_tserver_app.git
+    git clone https://github.com/your-username/typescript-server-with-node.js.git
     ```
 
 2. Navigate to the project directory:
