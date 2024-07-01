@@ -32,13 +32,29 @@ export class Calculator {
         this.display.value = '';
     }
 
-    private calculateResult(): void {
+    private async calculateResult(): Promise<void> {
         if (this.firstOperand && this.secondOperand && this.currentOperation) {
-            const result = eval(this.firstOperand + this.currentOperation + this.secondOperand);
-            this.display.value = result.toString();
-            this.firstOperand = result.toString();
-            this.secondOperand = '';
-            this.currentOperation = '';
+            try {
+                const response = await fetch('/api/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        firstOperand: this.firstOperand,
+                        secondOperand: this.secondOperand,
+                        operation: this.currentOperation,
+                    }),
+                });
+
+                const data = await response.json();
+                this.display.value = data.result.toString();
+                this.firstOperand = data.result.toString();
+                this.secondOperand = '';
+                this.currentOperation = '';
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
     }
 
