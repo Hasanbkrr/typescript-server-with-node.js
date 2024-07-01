@@ -1,38 +1,34 @@
 export class Calculator {
-    private display: HTMLInputElement;
-    private currentOperation: string = '';
-    private firstOperand: string = '';
-    private secondOperand: string = '';
-
-    constructor(display: HTMLInputElement) {
+    display;
+    currentOperation = '';
+    firstOperand = '';
+    secondOperand = '';
+    constructor(display) {
         this.display = display;
         this.attachEventListeners();
     }
-
-    private appendNumber(number: string): void {
+    appendNumber(number) {
         if (this.currentOperation) {
             this.secondOperand += number;
             this.display.value = this.secondOperand;
-        } else {
+        }
+        else {
             this.firstOperand += number;
             this.display.value = this.firstOperand;
         }
     }
-
-    private setOperation(operation: string): void {
+    setOperation(operation) {
         if (this.firstOperand) {
             this.currentOperation = operation;
         }
     }
-
-    private clearDisplay(): void {
+    clearDisplay() {
         this.firstOperand = '';
         this.secondOperand = '';
         this.currentOperation = '';
         this.display.value = '';
     }
-
-    private async calculateResult(): Promise<void> {
+    async calculateResult() {
         if (this.firstOperand && this.secondOperand && this.currentOperation) {
             const response = await fetch('/api/calculate', {
                 method: 'POST',
@@ -52,14 +48,13 @@ export class Calculator {
             this.currentOperation = '';
         }
     }
-
-    private async fetchHistory(): Promise<void> {
+    async fetchHistory() {
         const response = await fetch('/api/history');
         const history = await response.json();
         const historyList = document.getElementById('historyList');
         if (historyList) {
             historyList.innerHTML = '';
-            history.forEach((item: { operation: string; result: number }) => {
+            history.forEach((item) => {
                 const li = document.createElement('li');
                 li.textContent = `${item.operation} = ${item.result}`;
                 historyList.appendChild(li);
@@ -70,22 +65,24 @@ export class Calculator {
             historyContainer.style.display = 'block';
         }
     }
-
-    private attachEventListeners(): void {
+    attachEventListeners() {
         document.querySelectorAll('button').forEach(button => {
             button.addEventListener('click', (event) => {
-                const target = event.target as HTMLButtonElement;
+                const target = event.target;
                 const value = target.innerText;
-
                 if (!isNaN(Number(value))) {
                     this.appendNumber(value);
-                } else if (value === 'C') {
+                }
+                else if (value === 'C') {
                     this.clearDisplay();
-                } else if (value === '=') {
+                }
+                else if (value === '=') {
                     this.calculateResult();
-                } else if (value === 'History') {
+                }
+                else if (value === 'History') {
                     this.fetchHistory();
-                } else {
+                }
+                else {
                     this.setOperation(value);
                 }
             });
