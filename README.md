@@ -2,6 +2,8 @@
 
 `npm install`
 
+`npm install fluent-ffmpeg`
+
 Start dev server:
 
 `npm start`
